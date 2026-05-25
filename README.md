@@ -23,6 +23,7 @@ Proyek ini dikembangkan oleh:
 2. **M. Sohibbal** - 2307135312
 3. **Muhammad Abidillah** - 2307112117
 4. **Rehandra** - 2307113322
+5. **Ariful Fikri** - 2307110474
 
 ## 📥 Cara Menjalankan Secara Lokal
 Karena proyek ini memuat aset lokal 3D dan gambar (WebGL/A-Frame), aplikasi ini membutuhkan local server untuk berjalan dengan baik. Cara termudah adalah menggunakan ekstensi **Live Server** di Visual Studio Code:
