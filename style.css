@@ -280,13 +280,7 @@ canvas.vr-zoom {
 }
 
 #btnGyro {
-    display: none;
-}
-
-@media (pointer: coarse) {
-    #btnGyro {
-        display: flex;
-    }
+    display: none; /* Ditampilkan secara dinamis melalui JavaScript (app.js) jika perangkat mobile */
 }
 
 .hud-btn svg {
@@ -409,6 +403,7 @@ canvas.vr-zoom {
 
 /* ---- NAVIGATION ---- */
 .nav-controls {
+    position: relative; /* Container relatif untuk memposisikan tombol gyro secara absolut di bawah tengah */
     pointer-events: all;
     display: flex;
     align-items: center;
@@ -416,6 +411,14 @@ canvas.vr-zoom {
     gap: 20px;
     padding: 10px 24px 22px;
     background: linear-gradient(to top, rgba(6, 14, 28, 0.92) 0%, transparent 100%);
+}
+
+.gyro-bottom-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 28px; /* Selaras dengan bagian tengah kompas */
+    z-index: 10;
 }
 
 .nav-btn {
@@ -674,6 +677,24 @@ canvas.vr-zoom {
 
     .brand-sub {
         display: none;
+    }
+
+    .brand-info {
+        display: none; /* Sembunyikan teks brand untuk hemat ruang di layar kecil */
+    }
+
+    .hud-select {
+        padding: 0 8px;
+        padding-right: 22px;
+        font-size: 12px;
+        max-width: 100px;
+        height: 36px;
+        background-position: right 4px center;
+    }
+
+    .hud-btn {
+        width: 36px;
+        height: 36px;
     }
 
     .nav-btn {

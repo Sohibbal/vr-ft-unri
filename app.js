@@ -130,6 +130,11 @@ function preloadNeighbors(centerIndex) {
 function init() {
     if ($sceneTotal) $sceneTotal.textContent = SCENES.length;
 
+    // Tampilkan tombol gyro jika memenuhi syarat mobile/layar sentuh/tablet
+    updateGyroButtonVisibility();
+    window.addEventListener('resize', updateGyroButtonVisibility);
+    window.addEventListener('orientationchange', updateGyroButtonVisibility);
+
     buildDots();
     loadFirstScene();
     bindEvents();
@@ -653,6 +658,36 @@ function populateSceneSelector() {
             $selectScene.value = "";
         }
     });
+}
+
+function updateGyroButtonVisibility() {
+    if (!$btnGyro) return;
+
+    let isMobileDevice = false;
+    try {
+        if (typeof AFRAME !== 'undefined' && AFRAME.utils && AFRAME.utils.device) {
+            isMobileDevice = AFRAME.utils.device.isMobile();
+        }
+    } catch (e) {
+        console.error("A-Frame isMobile check failed:", e);
+    }
+
+    // Kombinasi deteksi UserAgent + Lebar Layar + Kemampuan Layar Sentuh (Touch)
+    isMobileDevice = isMobileDevice || 
+                     /Mobi|Android|iPhone|iPad|Tablet/i.test(navigator.userAgent) ||
+                     (window.innerWidth <= 1024 && (
+                         'ontouchstart' in window || 
+                         navigator.maxTouchPoints > 0 || 
+                         window.matchMedia('(pointer: coarse)').matches
+                     ));
+
+    console.log("Gyro button visibility check. isMobileDevice:", isMobileDevice, "Width:", window.innerWidth);
+
+    if (isMobileDevice) {
+        $btnGyro.style.setProperty('display', 'flex', 'important');
+    } else {
+        $btnGyro.style.setProperty('display', 'none', 'important');
+    }
 }
 
 // ── Bootstrap ──────────────────────────────────────────────
