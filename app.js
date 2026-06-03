@@ -28,7 +28,6 @@ const $fadeOverlay = document.getElementById('fadeOverlay');
 const $btnPrev = document.getElementById('btnPrev');
 const $btnNext = document.getElementById('btnNext');
 const $btnFullscreen = document.getElementById('btnFullscreen');
-const $btnVR = document.getElementById('btnVR');
 const $btnGyro = document.getElementById('btnGyro');
 
 const $sceneLabel = document.getElementById('sceneLabel');
@@ -128,11 +127,6 @@ function preloadNeighbors(centerIndex) {
 // ── Init ───────────────────────────────────────────────────
 function init() {
     if ($sceneTotal) $sceneTotal.textContent = SCENES.length;
-
-    // Tampilkan tombol gyro jika memenuhi syarat mobile/layar sentuh/tablet
-    updateGyroButtonVisibility();
-    window.addEventListener('resize', updateGyroButtonVisibility);
-    window.addEventListener('orientationchange', updateGyroButtonVisibility);
 
     // Default A-Frame di mobile menyalakan gyro saat load, sinkronisasikan state-nya
     if (typeof AFRAME !== 'undefined' && AFRAME.utils && AFRAME.utils.device && AFRAME.utils.device.isMobile()) {
@@ -508,27 +502,6 @@ function bindEvents() {
     $btnFullscreen.addEventListener('click', toggleFullscreen);
     document.addEventListener('fullscreenchange', onFullscreenChange);
 
-    $btnVR.addEventListener('click', () => {
-        const s = document.getElementById('aScene');
-        s.is('vr-mode') ? s.exitVR() : s.enterVR();
-    });
-
-    const aScene = document.getElementById('aScene');
-    if (aScene) {
-        aScene.addEventListener('enter-vr', () => {
-            if ($cursor) {
-                $cursor.setAttribute('raycaster', 'enabled: true; objects: .clickable');
-                $cursor.setAttribute('visible', 'true');
-            }
-        });
-        aScene.addEventListener('exit-vr', () => {
-            if ($cursor) {
-                $cursor.setAttribute('raycaster', 'enabled: false; objects: .clickable');
-                $cursor.setAttribute('visible', 'false');
-            }
-        });
-    }
-
     $btnGyro.addEventListener('click', toggleGyro);
 }
 
@@ -679,35 +652,6 @@ function populateSceneSelector() {
     });
 }
 
-function updateGyroButtonVisibility() {
-    if (!$btnGyro) return;
-
-    let isMobileDevice = false;
-    try {
-        if (typeof AFRAME !== 'undefined' && AFRAME.utils && AFRAME.utils.device) {
-            isMobileDevice = AFRAME.utils.device.isMobile();
-        }
-    } catch (e) {
-        console.error("A-Frame isMobile check failed:", e);
-    }
-
-    // Kombinasi deteksi UserAgent + Lebar Layar + Kemampuan Layar Sentuh (Touch)
-    isMobileDevice = isMobileDevice || 
-                     /Mobi|Android|iPhone|iPad|Tablet/i.test(navigator.userAgent) ||
-                     (window.innerWidth <= 1024 && (
-                         'ontouchstart' in window || 
-                         navigator.maxTouchPoints > 0 || 
-                         window.matchMedia('(pointer: coarse)').matches
-                     ));
-
-    console.log("Gyro button visibility check. isMobileDevice:", isMobileDevice, "Width:", window.innerWidth);
-
-    if (isMobileDevice) {
-        $btnGyro.style.setProperty('display', 'flex', 'important');
-    } else {
-        $btnGyro.style.setProperty('display', 'none', 'important');
-    }
-}
 
 // ── Bootstrap ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', init);
