@@ -135,6 +135,15 @@ function init() {
     window.addEventListener('resize', updateGyroButtonVisibility);
     window.addEventListener('orientationchange', updateGyroButtonVisibility);
 
+    // Default A-Frame di mobile menyalakan gyro saat load, sinkronisasikan state-nya
+    if (typeof AFRAME !== 'undefined' && AFRAME.utils && AFRAME.utils.device && AFRAME.utils.device.isMobile()) {
+        gyroEnabled = true;
+        if ($btnGyro) {
+            $btnGyro.style.color = 'var(--accent)';
+            $btnGyro.style.borderColor = 'var(--accent)';
+        }
+    }
+
     buildDots();
     loadFirstScene();
     bindEvents();
@@ -611,16 +620,31 @@ function toggleGyro() {
 }
 
 function enableGyro() {
-    document.getElementById('camera')?.setAttribute('look-controls', 'enabled: true');
+    const camEl = document.getElementById('camera');
+    if (camEl) {
+        camEl.setAttribute('look-controls', {
+            magicWindowTrackingEnabled: true
+        });
+    }
     gyroEnabled = true;
-    $btnGyro.style.color = 'var(--accent)';
-    $btnGyro.style.borderColor = 'var(--accent)';
+    if ($btnGyro) {
+        $btnGyro.style.color = 'var(--accent)';
+        $btnGyro.style.borderColor = 'var(--accent)';
+    }
 }
 
 function disableGyro() {
+    const camEl = document.getElementById('camera');
+    if (camEl) {
+        camEl.setAttribute('look-controls', {
+            magicWindowTrackingEnabled: false
+        });
+    }
     gyroEnabled = false;
-    $btnGyro.style.color = '';
-    $btnGyro.style.borderColor = '';
+    if ($btnGyro) {
+        $btnGyro.style.color = '';
+        $btnGyro.style.borderColor = '';
+    }
 }
 
 // ── Jump to Scene by ID (Shortcut) ─────────────────────────
