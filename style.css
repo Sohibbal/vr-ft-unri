@@ -433,8 +433,8 @@ canvas.vr-zoom {
 .gyro-bottom-center {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%) !important;
-    bottom: 28px; /* Selaras dengan bagian tengah kompas */
+    top: 50%;
+    transform: translate(-50%, -50%) !important;
     z-index: 10;
 }
 
