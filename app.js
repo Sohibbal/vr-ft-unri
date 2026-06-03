@@ -139,8 +139,13 @@ function init() {
     if (typeof AFRAME !== 'undefined' && AFRAME.utils && AFRAME.utils.device && AFRAME.utils.device.isMobile()) {
         gyroEnabled = true;
         if ($btnGyro) {
+            $btnGyro.textContent = "GYRO: ON";
             $btnGyro.style.color = 'var(--accent)';
             $btnGyro.style.borderColor = 'var(--accent)';
+        }
+    } else {
+        if ($btnGyro) {
+            $btnGyro.textContent = "GYRO: OFF";
         }
     }
 
@@ -628,6 +633,7 @@ function enableGyro() {
     }
     gyroEnabled = true;
     if ($btnGyro) {
+        $btnGyro.textContent = "GYRO: ON";
         $btnGyro.style.color = 'var(--accent)';
         $btnGyro.style.borderColor = 'var(--accent)';
     }
@@ -642,6 +648,7 @@ function disableGyro() {
     }
     gyroEnabled = false;
     if ($btnGyro) {
+        $btnGyro.textContent = "GYRO: OFF";
         $btnGyro.style.color = '';
         $btnGyro.style.borderColor = '';
     }
