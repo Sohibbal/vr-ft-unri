@@ -78,32 +78,14 @@
         <!-- VIRTUAL NAV BUTTONS (Google Street View style) -->
         <!-- Tombol MAJU (Next) -->
         <a-entity id="navBtnNext" class="clickable" visible="false" position="0 0 -5" rotation="-90 0 0">
-            <!-- Lingkaran luar (glow) -->
-            <a-ring class="clickable" color="#00D4FF" radius-inner="0.38" radius-outer="0.5"
-                material="opacity: 0.35; transparent: true; side: double"></a-ring>
-            <!-- Lingkaran utama -->
-            <a-circle class="clickable" radius="0.4" color="#FFFFFF"
-                material="opacity: 0.85; transparent: true; side: double"></a-circle>
-            <!-- Panah (chevron ke depan) -->
-            <a-entity position="0 0 0.01">
-                <a-triangle class="clickable" color="#0099CC" vertex-a="0 0.18 0" vertex-b="-0.14 -0.06 0"
-                    vertex-c="0.14 -0.06 0" material="side: double; opacity: 0.95; transparent: true"></a-triangle>
-            </a-entity>
+            <a-triangle class="clickable" color="#FFFFFF" vertex-a="0 0.35 0" vertex-b="-0.25 -0.15 0" vertex-c="0.25 -0.15 0"
+                material="side: double; opacity: 0.85; transparent: true; shader: flat"></a-triangle>
         </a-entity>
 
         <!-- Tombol MUNDUR (Prev) -->
         <a-entity id="navBtnPrev" class="clickable" visible="false" position="0 0 5" rotation="-90 180 0">
-            <!-- Lingkaran luar (glow) -->
-            <a-ring class="clickable" color="#00D4FF" radius-inner="0.38" radius-outer="0.5"
-                material="opacity: 0.35; transparent: true; side: double"></a-ring>
-            <!-- Lingkaran utama -->
-            <a-circle class="clickable" radius="0.4" color="#FFFFFF"
-                material="opacity: 0.85; transparent: true; side: double"></a-circle>
-            <!-- Panah (chevron ke belakang) -->
-            <a-entity position="0 0 0.01">
-                <a-triangle class="clickable" color="#0099CC" vertex-a="0 0.18 0" vertex-b="-0.14 -0.06 0"
-                    vertex-c="0.14 -0.06 0" material="side: double; opacity: 0.95; transparent: true"></a-triangle>
-            </a-entity>
+            <a-triangle class="clickable" color="#FFFFFF" vertex-a="0 0.35 0" vertex-b="-0.25 -0.15 0" vertex-c="0.25 -0.15 0"
+                material="side: double; opacity: 0.85; transparent: true; shader: flat"></a-triangle>
         </a-entity>
 
     </a-scene>
@@ -123,6 +105,7 @@
                 </div>
             </div>
             <div class="hud-actions">
+                <select id="selectScene" class="hud-select" title="Lompat ke Lokasi"></select>
                 <button id="btnVR" class="hud-btn" title="Mode VR">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="2" y="8" width="20" height="8" rx="4" />
@@ -153,9 +136,6 @@
                 <h2 class="scene-label" id="sceneLabel">Gerbang Utama</h2>
                 <p class="scene-desc" id="sceneDesc">Pintu masuk Fakultas Teknik Informatika UNRI</p>
                 <div class="scene-dot-wrap" id="sceneDots"></div>
-            </div>
-            <div class="scene-counter">
-                <span id="sceneNum">1</span><span class="sep">/</span><span id="sceneTotal">4</span>
             </div>
         </div>
 

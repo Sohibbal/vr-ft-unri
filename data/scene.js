@@ -84,7 +84,8 @@ const SCENES = [
         label: "Lokasi 4",
         description: "Deskripsi lokasi 4",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navPrev: "2.5 0 5"
     },
     {
         id: 5,
@@ -92,7 +93,8 @@ const SCENES = [
         label: "Lokasi 5",
         description: "Deskripsi lokasi 5",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navPrev: "1.5 0 5"
     },
     {
         id: 6,
@@ -100,7 +102,8 @@ const SCENES = [
         label: "Lokasi 6",
         description: "Deskripsi lokasi 6",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navPrev: "1.5 0 5"
     },
     {
         id: 7,
@@ -108,7 +111,9 @@ const SCENES = [
         label: "Lokasi 7",
         description: "Deskripsi lokasi 7",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navPrev: "1.5 0 5",
+        navPrevRot: "-90 -155 0"
     },
     {
         id: 8,
@@ -164,7 +169,9 @@ const SCENES = [
         label: "Lokasi 14",
         description: "Deskripsi lokasi 14",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNextRot: "-90 -10 0",
+        navPrevRot: "-90 -155 0"
     },
     {
         id: 15,
@@ -196,7 +203,9 @@ const SCENES = [
         label: "Lokasi 18",
         description: "Deskripsi lokasi 18",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNext: "-2.5 0 -3",
+        navNextRot: "-90 -5 0"
     },
     {
         id: 19,
@@ -204,7 +213,9 @@ const SCENES = [
         label: "Lokasi 19",
         description: "Deskripsi lokasi 19",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNext: "-1.5 0 -3",
+        navPrev: "-1.5 0 3"
     },
     {
         id: 20,
@@ -236,7 +247,8 @@ const SCENES = [
         label: "Lokasi 23",
         description: "Deskripsi lokasi 23",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNext: "-1 0 -3"
     },
     {
         id: 24,
@@ -244,7 +256,8 @@ const SCENES = [
         label: "Lokasi 24",
         description: "Deskripsi lokasi 24",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNext: "-1 0 -3"
     },
     {
         id: 25,
@@ -348,7 +361,8 @@ const SCENES = [
         label: "Lokasi 37",
         description: "Deskripsi lokasi 37",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNextRot: "-90 -20 0"
     },
     {
         id: 38,
@@ -396,7 +410,9 @@ const SCENES = [
         label: "Lokasi 43",
         description: "Deskripsi lokasi 43",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNext: "1.0 0 -5",
+        navNextRot: "-90 -10 0"
     },
     {
         id: 44,
@@ -444,7 +460,8 @@ const SCENES = [
         label: "Lokasi 49",
         description: "Deskripsi lokasi 49",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNext: "-2.5 0 -5"
     },
     {
         id: 50,
@@ -452,7 +469,9 @@ const SCENES = [
         label: "Lokasi 50",
         description: "Deskripsi lokasi 50",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNext: "-2.5 0 -5",
+        navPrev: "-1.5 0 5"
     },
     {
         id: 51,
@@ -460,7 +479,9 @@ const SCENES = [
         label: "Lokasi 51",
         description: "Deskripsi lokasi 51",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNext: "-2.5 0 -5",
+        navPrev: "-2.5 0 5"
     },
     {
         id: 52,
@@ -468,7 +489,9 @@ const SCENES = [
         label: "Lokasi 52",
         description: "Deskripsi lokasi 52",
         rotation: "0 180 0",
-        cameraYaw: 0
+        cameraYaw: 0,
+        navNext: "-2.5 0 -5",
+        navPrev: "-1.5 0 5"
     },
     {
         id: 53,

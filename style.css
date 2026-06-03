@@ -279,9 +279,52 @@ canvas.vr-zoom {
     -webkit-backdrop-filter: blur(12px);
 }
 
+#btnGyro {
+    display: none;
+}
+
+@media (pointer: coarse) {
+    #btnGyro {
+        display: flex;
+    }
+}
+
 .hud-btn svg {
     width: 18px;
     height: 18px;
+}
+
+.hud-select {
+    padding: 0 16px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-glass);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: var(--transition);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 32px;
+}
+
+.hud-select:hover {
+    background-color: rgba(0, 212, 255, 0.15);
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.2);
+}
+
+.hud-select option {
+    background: var(--bg-dark);
+    color: var(--text-primary);
 }
 
 .hud-btn:hover {
@@ -666,9 +709,5 @@ canvas.vr-zoom {
     .nav-controls {
         gap: 10px;
         padding: 0 12px 18px;
-    }
-
-    .hud-actions .hud-btn:last-child {
-        display: none;
     }
 }

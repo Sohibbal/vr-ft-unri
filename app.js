@@ -42,6 +42,7 @@ const $sceneSpinner = document.getElementById('sceneSpinner');
 const $navBtnNext = document.getElementById('navBtnNext');
 const $navBtnPrev = document.getElementById('navBtnPrev');
 const $cursor = document.getElementById('cursor');
+const $selectScene = document.getElementById('selectScene');
 
 // ── State ──────────────────────────────────────────────────
 let currentIndex = 0;
@@ -127,13 +128,14 @@ function preloadNeighbors(centerIndex) {
 
 // ── Init ───────────────────────────────────────────────────
 function init() {
-    $sceneTotal.textContent = SCENES.length;
+    if ($sceneTotal) $sceneTotal.textContent = SCENES.length;
 
     buildDots();
     loadFirstScene();
     bindEvents();
     bindZoom();
     initVirtualNav();
+    populateSceneSelector();
     startCompass();
     scheduleDragHintDismiss();
 }
@@ -401,9 +403,9 @@ function hideVirtualButtons() {
 function updateHUD() {
     const scene = SCENES[currentIndex];
 
-    $sceneLabel.textContent = scene.label;
-    $sceneDesc.textContent = scene.description;
-    $sceneNum.textContent = currentIndex + 1;
+    if ($sceneLabel) $sceneLabel.textContent = scene.label;
+    if ($sceneDesc) $sceneDesc.textContent = scene.description;
+    if ($sceneNum) $sceneNum.textContent = currentIndex + 1;
 
     // Navigasi circular — tombol selalu aktif
     if ($btnPrev) $btnPrev.disabled = false;
@@ -614,6 +616,43 @@ function disableGyro() {
     gyroEnabled = false;
     $btnGyro.style.color = '';
     $btnGyro.style.borderColor = '';
+}
+
+// ── Jump to Scene by ID (Shortcut) ─────────────────────────
+window.jumpToSceneById = function(id) {
+    const targetIdx = SCENES.findIndex(s => s.id === Number(id));
+    if (targetIdx !== -1) {
+        goToScene(targetIdx);
+    } else {
+        console.warn(`Scene dengan ID ${id} tidak ditemukan.`);
+    }
+};
+
+function populateSceneSelector() {
+    if (!$selectScene) return;
+    $selectScene.innerHTML = '';
+
+    const placeholder = document.createElement('option');
+    placeholder.value = "";
+    placeholder.textContent = "Lompat ke...";
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    $selectScene.appendChild(placeholder);
+
+    SCENES.forEach(scene => {
+        const opt = document.createElement('option');
+        opt.value = scene.id;
+        opt.textContent = `ID ${scene.id}: ${scene.label || ('Lokasi ' + scene.id)}`;
+        $selectScene.appendChild(opt);
+    });
+
+    $selectScene.addEventListener('change', (e) => {
+        const val = e.target.value;
+        if (val) {
+            window.jumpToSceneById(val);
+            $selectScene.value = "";
+        }
+    });
 }
 
 // ── Bootstrap ──────────────────────────────────────────────
