@@ -151,6 +151,7 @@ function init() {
     populateSceneSelector();
     startCompass();
     scheduleDragHintDismiss();
+    bindTouchPitch(); // Pitch manual saat Gyro OFF
 }
 
 // ── Build Scene Dots (max 3 bulir) ─────────────────────────
@@ -599,11 +600,6 @@ function toggleGyro() {
 
 function enableGyro() {
     window.gyroEnabled = true;
-    // Aktifkan magic window tracking agar sensor orientasi device digunakan
-    const camEl = document.getElementById('camera');
-    if (camEl) {
-        camEl.setAttribute('look-controls', 'magicWindowTrackingEnabled: true; pointerLockEnabled: false; reverseMouseDrag: false');
-    }
     if ($btnGyro) {
         $btnGyro.textContent = "GYRO: ON";
         $btnGyro.style.color = 'var(--accent)';
@@ -613,16 +609,48 @@ function enableGyro() {
 
 function disableGyro() {
     window.gyroEnabled = false;
-    // Matikan magic window tracking agar touch drag kontrol SEMUA arah (atas-bawah & kiri-kanan)
-    const camEl = document.getElementById('camera');
-    if (camEl) {
-        camEl.setAttribute('look-controls', 'magicWindowTrackingEnabled: false; pointerLockEnabled: false; reverseMouseDrag: false');
-    }
     if ($btnGyro) {
         $btnGyro.textContent = "GYRO: OFF";
         $btnGyro.style.color = '';
         $btnGyro.style.borderColor = '';
     }
+}
+
+// ── Touch Pitch Manual (aktif saat Gyro OFF) ───────────────
+// A-Frame hanya handle yaw via touch di mobile.
+// Saat gyro dimatikan, handler ini tambah kontrol pitch (atas-bawah)
+// secara langsung ke camera object3D tanpa konflik.
+function bindTouchPitch() {
+    const aScene = document.getElementById('aScene');
+    if (!aScene) return;
+
+    let lastTouchY = 0;
+    const PITCH_SENSITIVITY = 0.004; // radian per pixel
+    const PITCH_MAX = Math.PI / 2;   // 90 derajat batas atas/bawah
+
+    aScene.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+            lastTouchY = e.touches[0].clientY;
+        }
+    }, { passive: true });
+
+    aScene.addEventListener('touchmove', (e) => {
+        // Hanya aktif saat gyro OFF dan single touch
+        if (window.gyroEnabled || e.touches.length !== 1) return;
+
+        const currentY = e.touches[0].clientY;
+        const deltaY = currentY - lastTouchY;
+        lastTouchY = currentY;
+
+        const camEl = document.getElementById('camera');
+        if (!camEl || !camEl.object3D) return;
+
+        // Tambah pitch (A-Frame sudah handle yaw via touchmove-nya sendiri)
+        const newPitch = Math.max(-PITCH_MAX, Math.min(PITCH_MAX,
+            camEl.object3D.rotation.x + deltaY * PITCH_SENSITIVITY
+        ));
+        camEl.object3D.rotation.x = newPitch;
+    }, { passive: true });
 }
 
 // ── Jump to Scene by ID (Shortcut) ─────────────────────────
