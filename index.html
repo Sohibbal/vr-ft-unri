@@ -20,6 +20,9 @@
     <script src="data/scene.js"></script>
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Preload gambar pertama agar langsung dimuat -->
+    <link rel="preload" href="assets/images/1.jpg" as="image">
 </head>
 
 <body>
@@ -49,7 +52,7 @@
          A-FRAME SCENE
     ================================= -->
     <a-scene id="aScene" vr-mode-ui="enabled: true" renderer="antialias: true; colorManagement: true"
-        loading-screen="enabled: false">
+        loading-screen="enabled: false" cursor="rayOrigin: mouse" raycaster="objects: .clickable">
 
         <!-- ASSETS PRELOADER -->
         <a-assets id="aAssets" timeout="30000">
@@ -59,10 +62,9 @@
         <a-entity id="cameraRig" position="0 0 0">
             <a-entity id="camera" camera look-controls="pointerLockEnabled: false; reverseMouseDrag: false"
                 position="0 1.6 0" wasd-controls="enabled: false">
-                <a-cursor id="cursor" color="#00D4FF" fuse="false" raycaster="objects: .clickable"
-                    animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
-                    animation__fusing="property: scale; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
-                    geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03">
+                <a-cursor id="cursor" color="rgba(0,0,0,0)" fuse="false" raycaster="enabled: false; objects: .clickable"
+                    geometry="primitive: ring; radiusInner: 0.001; radiusOuter: 0.002"
+                    material="opacity: 0; transparent: true" visible="false">
                 </a-cursor>
             </a-entity>
         </a-entity>
@@ -72,6 +74,37 @@
 
         <!-- AMBIENT LIGHT -->
         <a-light type="ambient" color="#ffffff" intensity="1.5"></a-light>
+
+        <!-- VIRTUAL NAV BUTTONS (Google Street View style) -->
+        <!-- Tombol MAJU (Next) -->
+        <a-entity id="navBtnNext" class="clickable" visible="false" position="0 0 -5" rotation="-90 0 0">
+            <!-- Lingkaran luar (glow) -->
+            <a-ring class="clickable" color="#00D4FF" radius-inner="0.38" radius-outer="0.5"
+                material="opacity: 0.35; transparent: true; side: double"></a-ring>
+            <!-- Lingkaran utama -->
+            <a-circle class="clickable" radius="0.4" color="#FFFFFF"
+                material="opacity: 0.85; transparent: true; side: double"></a-circle>
+            <!-- Panah (chevron ke depan) -->
+            <a-entity position="0 0 0.01">
+                <a-triangle class="clickable" color="#0099CC" vertex-a="0 0.18 0" vertex-b="-0.14 -0.06 0"
+                    vertex-c="0.14 -0.06 0" material="side: double; opacity: 0.95; transparent: true"></a-triangle>
+            </a-entity>
+        </a-entity>
+
+        <!-- Tombol MUNDUR (Prev) -->
+        <a-entity id="navBtnPrev" class="clickable" visible="false" position="0 0 5" rotation="-90 180 0">
+            <!-- Lingkaran luar (glow) -->
+            <a-ring class="clickable" color="#00D4FF" radius-inner="0.38" radius-outer="0.5"
+                material="opacity: 0.35; transparent: true; side: double"></a-ring>
+            <!-- Lingkaran utama -->
+            <a-circle class="clickable" radius="0.4" color="#FFFFFF"
+                material="opacity: 0.85; transparent: true; side: double"></a-circle>
+            <!-- Panah (chevron ke belakang) -->
+            <a-entity position="0 0 0.01">
+                <a-triangle class="clickable" color="#0099CC" vertex-a="0 0.18 0" vertex-b="-0.14 -0.06 0"
+                    vertex-c="0.14 -0.06 0" material="side: double; opacity: 0.95; transparent: true"></a-triangle>
+            </a-entity>
+        </a-entity>
 
     </a-scene>
 
@@ -116,10 +149,10 @@
 
         <!-- SCENE INFO -->
         <div class="scene-info" id="sceneInfo">
-            <div class="scene-dot-wrap" id="sceneDots"></div>
             <div class="scene-meta">
                 <h2 class="scene-label" id="sceneLabel">Gerbang Utama</h2>
                 <p class="scene-desc" id="sceneDesc">Pintu masuk Fakultas Teknik Informatika UNRI</p>
+                <div class="scene-dot-wrap" id="sceneDots"></div>
             </div>
             <div class="scene-counter">
                 <span id="sceneNum">1</span><span class="sep">/</span><span id="sceneTotal">4</span>
@@ -136,33 +169,24 @@
             Seret untuk melihat sekitar
         </div>
 
-        <!-- THUMBNAIL STRIP -->
-        <div class="thumb-strip" id="thumbStrip"></div>
+
 
         <!-- NAVIGATION -->
         <div class="nav-controls">
-            <button id="btnPrev" class="nav-btn nav-prev" title="Lokasi Sebelumnya" disabled>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="15 18 9 12 15 6" />
-                </svg>
-                <span>Sebelumnya</span>
-            </button>
-
             <div class="nav-compass" id="navCompass">
                 <div class="compass-ring">
                     <div class="compass-needle"></div>
                     <span class="compass-n">N</span>
                 </div>
             </div>
-
-            <button id="btnNext" class="nav-btn nav-next" title="Lokasi Berikutnya">
-                <span>Berikutnya</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="9 18 15 12 9 6" />
-                </svg>
-            </button>
         </div>
 
+    </div>
+
+    <!-- SCENE LOADING SPINNER (muncul saat gambar belum siap) -->
+    <div id="sceneSpinner" class="scene-spinner">
+        <div class="scene-spinner-ring"></div>
+        <span>Memuat...</span>
     </div>
 
     <!-- FADE OVERLAY for transitions -->
