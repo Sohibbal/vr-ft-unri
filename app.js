@@ -599,6 +599,11 @@ function toggleGyro() {
 
 function enableGyro() {
     window.gyroEnabled = true;
+    // Aktifkan magic window tracking agar sensor orientasi device digunakan
+    const camEl = document.getElementById('camera');
+    if (camEl) {
+        camEl.setAttribute('look-controls', 'magicWindowTrackingEnabled: true; pointerLockEnabled: false; reverseMouseDrag: false');
+    }
     if ($btnGyro) {
         $btnGyro.textContent = "GYRO: ON";
         $btnGyro.style.color = 'var(--accent)';
@@ -608,6 +613,11 @@ function enableGyro() {
 
 function disableGyro() {
     window.gyroEnabled = false;
+    // Matikan magic window tracking agar touch drag kontrol SEMUA arah (atas-bawah & kiri-kanan)
+    const camEl = document.getElementById('camera');
+    if (camEl) {
+        camEl.setAttribute('look-controls', 'magicWindowTrackingEnabled: false; pointerLockEnabled: false; reverseMouseDrag: false');
+    }
     if ($btnGyro) {
         $btnGyro.textContent = "GYRO: OFF";
         $btnGyro.style.color = '';
