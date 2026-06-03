@@ -47,7 +47,6 @@ const $selectScene = document.getElementById('selectScene');
 // ── State ──────────────────────────────────────────────────
 let currentIndex = 0;
 let isTransitioning = false;
-let gyroEnabled = false;
 let hintDismissed = false;
 
 // ── Image Cache (LRU) ─────────────────────────────────────
@@ -137,13 +136,14 @@ function init() {
 
     // Default A-Frame di mobile menyalakan gyro saat load, sinkronisasikan state-nya
     if (typeof AFRAME !== 'undefined' && AFRAME.utils && AFRAME.utils.device && AFRAME.utils.device.isMobile()) {
-        gyroEnabled = true;
+        window.gyroEnabled = true;
         if ($btnGyro) {
             $btnGyro.textContent = "GYRO: ON";
             $btnGyro.style.color = 'var(--accent)';
             $btnGyro.style.borderColor = 'var(--accent)';
         }
     } else {
+        window.gyroEnabled = false;
         if ($btnGyro) {
             $btnGyro.textContent = "GYRO: OFF";
         }
@@ -611,7 +611,7 @@ function toggleGyro() {
         alert('Gyroscope tidak tersedia di perangkat ini.');
         return;
     }
-    if (!gyroEnabled) {
+    if (!window.gyroEnabled) {
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
             DeviceOrientationEvent.requestPermission()
                 .then(r => { if (r === 'granted') enableGyro(); })
@@ -625,13 +625,7 @@ function toggleGyro() {
 }
 
 function enableGyro() {
-    const camEl = document.getElementById('camera');
-    if (camEl) {
-        camEl.setAttribute('look-controls', {
-            magicWindowTrackingEnabled: true
-        });
-    }
-    gyroEnabled = true;
+    window.gyroEnabled = true;
     if ($btnGyro) {
         $btnGyro.textContent = "GYRO: ON";
         $btnGyro.style.color = 'var(--accent)';
@@ -640,13 +634,7 @@ function enableGyro() {
 }
 
 function disableGyro() {
-    const camEl = document.getElementById('camera');
-    if (camEl) {
-        camEl.setAttribute('look-controls', {
-            magicWindowTrackingEnabled: false
-        });
-    }
-    gyroEnabled = false;
+    window.gyroEnabled = false;
     if ($btnGyro) {
         $btnGyro.textContent = "GYRO: OFF";
         $btnGyro.style.color = '';

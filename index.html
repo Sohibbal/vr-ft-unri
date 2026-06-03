@@ -13,6 +13,42 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Intercept DeviceOrientation untuk toggle ON/OFF Gyro tanpa merusak Touch Pitch Controls -->
+    <script>
+        window.gyroEnabled = true; // Default aktif di mobile
+        const originalAddEventListener = window.addEventListener;
+        const gyroListeners = [];
+
+        window.addEventListener = function(type, listener, options) {
+            if (type === 'deviceorientation' || type === 'deviceorientationabsolute') {
+                const wrappedListener = function(event) {
+                    if (window.gyroEnabled) {
+                        listener.call(this, event);
+                    }
+                };
+                gyroListeners.push({ original: listener, wrapped: wrappedListener });
+                originalAddEventListener.call(this, type, wrappedListener, options);
+            } else {
+                originalAddEventListener.call(this, type, listener, options);
+            }
+        };
+
+        const originalRemoveEventListener = window.removeEventListener;
+        window.removeEventListener = function(type, listener, options) {
+            if (type === 'deviceorientation' || type === 'deviceorientationabsolute') {
+                const index = gyroListeners.findIndex(item => item.original === listener);
+                if (index !== -1) {
+                    originalRemoveEventListener.call(this, type, gyroListeners[index].wrapped, options);
+                    gyroListeners.splice(index, 1);
+                } else {
+                    originalRemoveEventListener.call(this, type, listener, options);
+                }
+            } else {
+                originalRemoveEventListener.call(this, type, listener, options);
+            }
+        };
+    </script>
+
     <!-- A-Frame -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 
@@ -152,10 +188,10 @@
                     <span class="compass-n">N</span>
                 </div>
             </div>
-
-            <!-- Tombol Gyroscope di bawah tengah -->
-            <button id="btnGyro" class="hud-btn gyro-bottom-center" title="Gyroscope">GYRO: ON</button>
         </div>
+
+        <!-- Tombol Gyroscope di bawah tengah (Direct child of #hud) -->
+        <button id="btnGyro" class="hud-btn gyro-bottom-center" title="Gyroscope">GYRO: ON</button>
 
     </div>
 
