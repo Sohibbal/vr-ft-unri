@@ -1,5 +1,5 @@
 /* =========================================================
-   VIRTUAL TOUR – Fakultas Teknik Informatika UNRI
+   VIRTUAL TOUR – Fakultas Teknik UNRI
    app.js – Main Application Logic (Optimized Lazy Loading)
    =========================================================
    Fitur:
@@ -47,6 +47,7 @@ const $selectScene = document.getElementById('selectScene');
 let currentIndex = 0;
 let isTransitioning = false;
 let hintDismissed = false;
+let activeLabelPlanes = []; // Menyimpan referensi plane 3D yang sedang aktif
 
 // ── Image Cache (LRU) ─────────────────────────────────────
 // Menyimpan Image objects yang sudah dimuat.
@@ -413,6 +414,77 @@ function hideVirtualButtons() {
     if ($navBtnPrev) $navBtnPrev.setAttribute('visible', false);
 }
 
+// ── Label Planes 3D (Panel Nama Lokasi, Multi-Plane Support) ───────
+// Dibaca dari field planes[] di scene.js.
+// Tiap elemen: { pos: "X Y Z", rot: "X Y Z" }
+
+/**
+ * Buat satu entitas label plane di A-Frame secara dinamis.
+ * @param {string} label  - teks yang ditampilkan
+ * @param {string} pos    - posisi "X Y Z"
+ * @param {string} rot    - rotasi "X Y Z" (default "0 0 0")
+ */
+function createLabelPlaneEntity(label, pos, rot) {
+    const entity = document.createElement('a-entity');
+    entity.setAttribute('position', pos || '0 2 -8');
+    entity.setAttribute('rotation', rot || '0 0 0');
+
+    // Background hitam transparan
+    const bg = document.createElement('a-plane');
+    bg.setAttribute('width', '3.2');
+    bg.setAttribute('height', '0.5');
+    bg.setAttribute('color', '#000000');
+    bg.setAttribute('material', 'opacity: 0.60; transparent: true; shader: flat; side: double');
+    bg.setAttribute('position', '0 0 0');
+    entity.appendChild(bg);
+
+    // Teks label putih di tengah plane
+    const text = document.createElement('a-text');
+    text.setAttribute('value', label || '');
+    text.setAttribute('color', '#FFFFFF');
+    text.setAttribute('align', 'center');
+    text.setAttribute('anchor', 'center');
+    text.setAttribute('baseline', 'center');
+    text.setAttribute('width', '3.0');
+    text.setAttribute('position', '0 0 0.01');
+    entity.appendChild(text);
+
+    return entity;
+}
+
+/**
+ * Hapus semua plane lama dan buat plane baru sesuai data scene aktif.
+ * Membaca field planes[] dari SCENES[currentIndex].
+ * Jika planes tidak ada / kosong, tidak ada plane yang ditampilkan.
+ */
+function updateLabelPlanes() {
+    const aScene = document.getElementById('aScene');
+    if (!aScene) return;
+
+    // Hapus semua plane aktif sebelumnya
+    activeLabelPlanes.forEach(el => {
+        if (el.parentNode) el.parentNode.removeChild(el);
+    });
+    activeLabelPlanes = [];
+
+    const scene = SCENES[currentIndex];
+    const planes = scene.planes;
+
+    // Tidak ada planes di scene ini → tidak perlu render apapun
+    if (!planes || planes.length === 0) return;
+
+    // Buat entitas baru untuk setiap plane
+    planes.forEach(planeDef => {
+        const entity = createLabelPlaneEntity(
+            planeDef.label || scene.label,  // label per-plane, fallback ke label scene
+            planeDef.pos,
+            planeDef.rot
+        );
+        aScene.appendChild(entity);
+        activeLabelPlanes.push(entity);
+    });
+}
+
 // ── Update HUD ──────────────────────────────────────────────
 function updateHUD() {
     const scene = SCENES[currentIndex];
@@ -430,6 +502,9 @@ function updateHUD() {
 
     // Update posisi virtual nav buttons
     updateVirtualButtons();
+
+    // Update label planes 3D (multi-plane support)
+    updateLabelPlanes();
 }
 
 // ── Compass (live dari rotasi kamera) ──────────────────────
@@ -674,10 +749,32 @@ function populateSceneSelector() {
     placeholder.selected = true;
     $selectScene.appendChild(placeholder);
 
+    // Kelompokkan scene berdasarkan label (case-insensitive).
+    // Simpan hanya scene dengan ID terkecil per label unik.
+    const labelMap = new Map(); // key: label lowercase, value: scene object (ID terkecil)
+
     SCENES.forEach(scene => {
+        const key = (scene.label || '').trim().toLowerCase();
+        if (!key) return; // skip scene tanpa label
+
+        if (!labelMap.has(key)) {
+            labelMap.set(key, scene);
+        } else {
+            // Ambil yang ID-nya lebih kecil
+            if (scene.id < labelMap.get(key).id) {
+                labelMap.set(key, scene);
+            }
+        }
+    });
+
+    // Urutkan berdasarkan ID scene terkecil di tiap grup agar urutan logis
+    const uniqueScenes = Array.from(labelMap.values())
+        .sort((a, b) => a.id - b.id);
+
+    uniqueScenes.forEach(scene => {
         const opt = document.createElement('option');
         opt.value = scene.id;
-        opt.textContent = `ID ${scene.id}: ${scene.label || ('Lokasi ' + scene.id)}`;
+        opt.textContent = scene.label || ('Lokasi ' + scene.id);
         $selectScene.appendChild(opt);
     });
 

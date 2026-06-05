@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Tour – Fakultas Teknik Informatika UNRI</title>
+    <title>Virtual Tour – Fakultas Teknik UNRI</title>
     <meta name="description"
-        content="Jelajahi kampus Fakultas Teknik Informatika Universitas Riau secara virtual 360° seperti Google Street View.">
+        content="Jelajahi kampus Fakultas Teknik Universitas Riau secara virtual 360° seperti Google Street View.">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,7 +76,7 @@
                 </div>
             </div>
             <h1 class="loading-title">Virtual Tour</h1>
-            <p class="loading-subtitle">Fakultas Teknik Informatika<br><strong>Universitas Riau</strong></p>
+            <p class="loading-subtitle">Fakultas Teknik<br><strong>Universitas Riau</strong></p>
             <div class="loading-bar-wrap">
                 <div class="loading-bar" id="loadingBar"></div>
             </div>
@@ -128,6 +128,9 @@
                 material="side: double; opacity: 0.15; transparent: true; shader: flat"></a-circle>
         </a-entity>
 
+        <!-- LABEL PLANES dibuat secara dinamis oleh app.js -->
+        <!-- Lihat fungsi updateLabelPlanes() dan field planes[] di scene.js -->
+
     </a-scene>
 
     <!-- ==============================
@@ -141,7 +144,7 @@
                 <div class="brand-badge">360°</div>
                 <div class="brand-info">
                     <span class="brand-name">Virtual Tour</span>
-                    <span class="brand-sub">Teknik Informatika · UNRI</span>
+                    <span class="brand-sub">Teknik · UNRI</span>
                 </div>
             </div>
             <div class="hud-actions">
@@ -160,7 +163,7 @@
         <div class="scene-info" id="sceneInfo">
             <div class="scene-meta">
                 <h2 class="scene-label" id="sceneLabel">Gerbang Utama</h2>
-                <p class="scene-desc" id="sceneDesc">Pintu masuk Fakultas Teknik Informatika UNRI</p>
+                <p class="scene-desc" id="sceneDesc">Pintu masuk Fakultas Teknik UNRI</p>
                 <div class="scene-dot-wrap" id="sceneDots"></div>
             </div>
         </div>

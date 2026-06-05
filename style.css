@@ -1,5 +1,5 @@
 /* =========================================================
-   VIRTUAL TOUR – Fakultas Teknik Informatika UNRI
+   VIRTUAL TOUR – Fakultas Teknik UNRI
    Professional Google Maps 360 Style
    ========================================================= */
 
@@ -306,8 +306,8 @@ canvas.vr-zoom {
     padding: 0 16px;
     height: 40px;
     border-radius: var(--radius-sm);
-    background: var(--bg-glass);
-    border: 1px solid var(--border);
+    background: rgba(8, 20, 42, 0.45);
+    border: 1px solid rgba(0, 212, 255, 0.30);
     color: var(--text-primary);
     font-family: var(--font);
     font-size: 13px;
@@ -315,24 +315,40 @@ canvas.vr-zoom {
     cursor: pointer;
     outline: none;
     transition: var(--transition);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg fill='rgba(0,212,255,0.8)' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
     background-repeat: no-repeat;
     background-position: right 8px center;
     padding-right: 32px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 0 0 0 rgba(0, 212, 255, 0);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .hud-select:hover {
-    background-color: rgba(0, 212, 255, 0.15);
+    background: rgba(0, 212, 255, 0.10);
+    border-color: rgba(0, 212, 255, 0.60);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.10),
+                0 0 18px rgba(0, 212, 255, 0.18);
+}
+
+.hud-select:focus {
     border-color: var(--accent);
-    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.2);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4),
+                0 0 0 2px rgba(0, 212, 255, 0.20),
+                0 0 24px rgba(0, 212, 255, 0.22);
 }
 
 .hud-select option {
-    background: var(--bg-dark);
+    background: #0a1828;
     color: var(--text-primary);
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 6px 12px;
 }
 
 .hud-btn:hover {
@@ -417,7 +433,8 @@ canvas.vr-zoom {
 
 /* ---- NAVIGATION ---- */
 .nav-controls {
-    position: relative; /* Container relatif untuk memposisikan tombol gyro secara absolut di bawah tengah */
+    position: relative;
+    /* Container relatif untuk memposisikan tombol gyro secara absolut di bawah tengah */
     pointer-events: all;
     display: flex;
     align-items: center;
@@ -597,7 +614,8 @@ canvas.vr-zoom {
     border: 1px solid var(--border);
     border-radius: 99px;
     padding: 7px 16px;
-    margin: auto auto 6px;  /* margin-top: auto mendorong blok bawah ke bawah HUD */
+    margin: auto auto 6px;
+    /* margin-top: auto mendorong blok bawah ke bawah HUD */
     font-size: 12px;
     color: var(--text-muted);
     backdrop-filter: blur(12px);
@@ -687,7 +705,8 @@ canvas.vr-zoom {
     }
 
     .brand-info {
-        display: none; /* Sembunyikan teks brand untuk hemat ruang di layar kecil */
+        display: none;
+        /* Sembunyikan teks brand untuk hemat ruang di layar kecil */
     }
 
     .hud-select {
