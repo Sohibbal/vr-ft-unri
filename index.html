@@ -130,8 +130,11 @@
                 material="side: double; opacity: 0.15; transparent: true; shader: flat"></a-circle>
         </a-entity>
 
-        <!-- LABEL PLANES dibuat secara dinamis oleh app.js -->
-        <!-- Lihat fungsi updateLabelPlanes() dan field planes[] di scene.js -->
+        <!-- 3D NADIR COPYRIGHT (Teks Virtual di Lantai) -->
+        <a-entity id="nadirCopyright" position="0 0.05 0" rotation="-90 0 0">
+            <a-text value="Copyright 2026 | Dibuat oleh Teknik Informatika KCV 23" 
+                align="center" width="2.4" color="#FFFFFF" shader="flat" side="double" opacity="0.7"></a-text>
+        </a-entity>
 
     </a-scene>
 
@@ -187,8 +190,13 @@
                 <div class="compass-ring">
                     <div class="compass-needle"></div>
                     <span class="compass-n">N</span>
-                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- COPYRIGHT OVERLAY -->
+        <div class="hud-copyright">
+            Copyright &copy; 2026 | Dibuat dengan ❤️ oleh Teknik Informatika KCV 23
         </div>
 
     </div>
