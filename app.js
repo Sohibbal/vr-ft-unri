@@ -251,10 +251,9 @@ function hideLoading() {
 
 // ── Core: Go To Scene (Google Maps zoom-forward transition) ──
 const FOV_NORMAL = 80;   // derajat FOV saat normal
-const FOV_ZOOMED = 52;   // derajat FOV saat zoom-in (makin kecil = makin zoom)
-const ZOOM_IN_MS = 380;  // durasi zoom-in (ms)
-const ZOOM_OUT_MS = 440;  // durasi zoom-out / settle (ms)
-const SWAP_HOLD = 55;   // jeda setelah swap sebelum zoom-out (ms)
+const FOV_ZOOMED = 55;   // derajat FOV saat zoom-in
+const ZOOM_IN_MS  = 300; // durasi zoom-in (ms)
+const ZOOM_OUT_MS = 380; // durasi zoom-out / settle (ms)
 
 function goToScene(index) {
     if (isTransitioning) return;
@@ -286,18 +285,20 @@ function goToScene(index) {
 }
 
 /**
- * Jalankan animasi transisi zoom-forward.
+ * Jalankan animasi transisi zoom-forward yang dioptimalkan.
+ * Alur: zoom-in (blur) → swap gambar → zoom-out
  */
 function performTransition(index, next, camEl, canvas) {
     // Sembunyikan virtual buttons selama transisi
     hideVirtualButtons();
 
-    // ── Phase 1: Zoom-in (maju ke depan) ──────────────────
+    // ── Phase 1: Zoom-in + blur (maju ke depan) ───────────
     canvas?.classList.add('vr-zoom');
 
-    animateFOV(camEl, FOV_NORMAL, FOV_ZOOMED, ZOOM_IN_MS, easeInCubic, () => {
+    animateFOV(camEl, FOV_NORMAL, FOV_ZOOMED, ZOOM_IN_MS, easeInQuart, () => {
 
-        // ── Midpoint: swap scene (tak terlihat karena penuh zoom) ──
+        // ── Midpoint: swap scene di titik paling blur ──────
+        // Blur + scale cukup menyembunyikan pergantian tanpa overlay
         resetZoom();
         $sky.setAttribute('src', next.src);
         $sky.setAttribute('rotation', next.rotation);
@@ -306,16 +307,13 @@ function performTransition(index, next, camEl, canvas) {
         updateHUD();
 
         // ── Phase 2: Zoom-out (settle ke lokasi baru) ──────
-        setTimeout(() => {
-            canvas?.classList.remove('vr-zoom');
+        canvas?.classList.remove('vr-zoom');
+        animateFOV(camEl, FOV_ZOOMED, FOV_NORMAL, ZOOM_OUT_MS, easeOutQuart, () => {
+            isTransitioning = false;
+        });
 
-            animateFOV(camEl, FOV_ZOOMED, FOV_NORMAL, ZOOM_OUT_MS, easeOutCubic, () => {
-                isTransitioning = false;
-            });
-
-            // Preload tetangga baru di background
-            preloadNeighbors(index);
-        }, SWAP_HOLD);
+        // Preload tetangga baru di background
+        preloadNeighbors(index);
     });
 }
 
@@ -352,7 +350,11 @@ function animateFOV(camEl, fromFov, toFov, duration, easeFn, onComplete) {
 }
 
 // ── Easing functions ───────────────────────────────────────
-function easeInCubic(t) { return t * t * t; }
+// Quart: lebih ekspresif dari cubic — akselerasi lebih cepat, deselerasi lebih smooth
+function easeInQuart(t)  { return t * t * t * t; }
+function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+// Cubic (dipertahankan sebagai referensi)
+function easeInCubic(t)  { return t * t * t; }
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
 // ── Apply Camera Yaw (arah pandang awal per scene) ─────────

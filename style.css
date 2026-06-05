@@ -165,14 +165,17 @@ canvas {
     display: block;
     width: 100% !important;
     height: 100% !important;
-    /* Smooth filter transition untuk efek motion blur */
-    transition: filter 0.38s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: filter;
+    /* Smooth filter transition sinkron dengan ZOOM_IN_MS (300ms) */
+    transition: filter 0.22s cubic-bezier(0.4, 0, 1, 1),
+                transform 0.22s cubic-bezier(0.4, 0, 1, 1);
+    will-change: filter, transform;
+    transform-origin: center center;
 }
 
 /* Kelas aktif saat zoom-forward berjalan */
 canvas.vr-zoom {
-    filter: blur(2.5px) brightness(1.12);
+    filter: blur(3.5px) brightness(1.08);
+    transform: scale(1.018);
 }
 
 /* =========================================================
